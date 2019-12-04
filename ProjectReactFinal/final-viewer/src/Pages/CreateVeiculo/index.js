@@ -1,32 +1,30 @@
 import React, { Component } from "react";
+import Select from "react-select";
+import PropTypes from "prop-types";
 import "./styles.css";
-import {Redirect} from 'react-router-dom';
+import { Redirect } from "react-router-dom";
 import Modal from "react-modal";
 export default class VeiculoRegistration extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      cnpj: "",
-      cpf: "",
-      identidade: 0,
-      inscEstadual: "",
-      razaoSocial: "",
-      nomeFantasia: "",
-      isPessoajuridica: 0,
-      email: "",
-      logradouro: "",
-      numero: 0,
-      complemento: "",
-      bairro: "",
-      cidade: "",
-      estado: "",
-      cep: 0,
-      dd: 0,
-      numeroTelefone: 0,
-      dados: [],
-      modalIsOpen: false,
-      msg: "",
-      redirect:false
+      placa: 0,
+      chassi: 0,
+      precoCompra: 0,
+      precoVenda: 0.0,
+      nPassageiros: 0,
+      anoFabricacao: "",
+      anoModelo: "",
+      cvPotencia: 0,
+      capacidadePortaMalas: 0,
+      Km: 0,
+      situacao: PropTypes.oneOf([
+        "disponível",
+        "locado",
+        "manutenção",
+        "vendido"
+      ]),
+      dados: []
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.openModal = this.openModal.bind(this);
@@ -35,37 +33,21 @@ export default class VeiculoRegistration extends Component {
     this.handleEdit = this.handleEdit.bind(this);
   }
 
-  setRedirect = () =>{
-    this.setState({
-      redirect:true
-    })
-  }
-  renderRedirect = () =>{
-    if(this.state.redirect){
-      return <Redirect to='/clientecadastro'/>
-    }
-  }
-  openModal(cliente) {
+  openModal(veiculo) {
     this.setState({
       modalIsOpen: true,
-      cnpj: cliente.cnpj,
-      cpf: cliente.cpf,
-      identidade: cliente.identidade,
-      inscEstadual: cliente.inscEstadual,
-      razaoSocial: cliente.razaoSocial,
-      nomeFantasia: cliente.nomeFantasia,
-      isPessoajuridica: cliente.isPessoajuridica,
-      email: cliente.email,
-      logradouro: cliente.logradouro,
-      numero: cliente.numero,
-      complemento: cliente.complemento,
-      bairro: cliente.bairro,
-      cidade: cliente.cidade,
-      estado: cliente.estado,
-      cep: cliente.cep,
-      dd: cliente.dd,
-      numeroTelefone: cliente.numeroTelefone,
-      id: cliente.idCliente
+      placa: veiculo.placa,
+      chassi: veiculo.chassi,
+      precoCompra: veiculo.precoCompra,
+      precoVenda: veiculo.precoVenda,
+      nPassageiros: veiculo.nPassageiros,
+      anoFabricacao: veiculo.anoFabricacao,
+      anoModelo: veiculo.anoModelo,
+      cvPotencia: veiculo.cvPotencia,
+      capacidadePortaMalas: veiculo.capacidadePortaMalas,
+      Km: veiculo.Km,
+      situacao: veiculo.situacao,
+      id: veiculo.idVeiculo
     });
   }
   closeModal() {
@@ -75,7 +57,7 @@ export default class VeiculoRegistration extends Component {
   }
   componentDidMount() {
     let self = this;
-    fetch("http://localhost:3000/cliente", {
+    fetch("http://localhost:3000/veiculo", {
       method: "GET"
     })
       .then(function(response) {
@@ -94,26 +76,20 @@ export default class VeiculoRegistration extends Component {
   handleSubmit(event) {
     event.preventDefault();
     var data = {
-      cnpj: this.state.cnpj,
-      cpf: this.state.cpf,
-      identidade: this.state.identidade,
-      inscEstadual: this.state.inscEstadual,
-      razaoSocial: this.state.razaoSocial,
-      nomeFantasia: this.state.nomeFantasia,
-      isPessoajuridica: this.state.isPessoajuridica,
-      email: this.state.email,
-      logradouro: this.state.logradouro,
-      numero: this.state.numero,
-      complemento: this.state.complemento,
-      bairro: this.state.bairro,
-      cidade: this.state.cidade,
-      estado: this.state.estado,
-      cep: this.state.cep,
-      dd: this.state.dd,
-      numeroTelefone: this.state.numeroTelefone
+      placa: this.state.placa,
+      chassi: this.state.chassi,
+      precoCompra: this.state.precoCompra,
+      precoVenda: this.state.precoVenda,
+      nPassageiros: this.state.nPassageiros,
+      anoFabricacao: this.state.anoFabricacao,
+      anoModelo: this.state.anoModelo,
+      cvPotencia: this.state.cvPotencia,
+      capacidadePortaMalas: this.state.capacidadePortaMalas,
+      Km: this.state.Km,
+      situacao: this.state.situacao
     };
     console.log(data);
-    fetch("http://localhost:3000/cliente", {
+    fetch("http://localhost:3000/veiculo", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data)
@@ -141,27 +117,21 @@ export default class VeiculoRegistration extends Component {
   handleEdit(event) {
     event.preventDefault();
     var data = {
-      cnpj: this.state.cnpj,
-      cpf: this.state.cpf,
-      identidade: this.state.identidade,
-      inscEstadual: this.state.inscEstadual,
-      razaoSocial: this.state.razaoSocial,
-      nomeFantasia: this.state.nomeFantasia,
-      isPessoajuridica: this.state.isPessoajuridica,
-      email: this.state.email,
-      logradouro: this.state.logradouro,
-      numero: this.state.numero,
-      complemento: this.state.complemento,
-      bairro: this.state.bairro,
-      cidade: this.state.cidade,
-      estado: this.state.estado,
-      cep: this.state.cep,
-      dd: this.state.dd,
-      numeroTelefone: this.state.numeroTelefone,
-      id: this.state.idCliente
+      placa: this.state.placa,
+      chassi: this.state.chassi,
+      precoCompra: this.state.precoCompra,
+      precoVenda: this.state.precoVenda,
+      nPassageiros: this.state.nPassageiros,
+      anoFabricacao: this.state.anoFabricacao,
+      anoModelo: this.state.anoModelo,
+      cvPotencia: this.state.cvPotencia,
+      capacidadePortaMalas: this.state.capacidadePortaMalas,
+      Km: this.state.Km,
+      situacao: this.state.situacao,
+      id: this.state.idVeiculo
     };
-  
-    fetch(`http://localhost:3000/cliente/${this.state.id}`, {
+
+    fetch(`http://localhost:3000/veiculo/${this.state.id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json"
@@ -197,182 +167,127 @@ export default class VeiculoRegistration extends Component {
         >
           <div className="control-group">
             <label class="control-label" for="inputName">
-              Nome
+              Placa
             </label>
             <div className="controls">
               <input
                 type="text"
                 onChange={this.logChange}
                 className="form-control"
-                name="nomeFantasia"
+                name="placa"
                 placeholder="Escreva seu nome aqui"
               />
             </div>
           </div>
           <div className="control-group">
             <label class="control-label" for="inputName">
-              CNPJ
+              Chassi
             </label>
             <input
               onChange={this.logChange}
               className="form-control"
               placeholder="Escreva seu CNPJ aqui"
-              name="cnpj"
+              name="chassi"
             />
           </div>
           <div className="control-group">
             <label class="control-label" for="inputName">
-              CPF
+              Preço de Compra
             </label>
             <input
               onChange={this.logChange}
               className="form-control"
               placeholder="Escreva seu CPF aqui"
-              name="cpf"
+              name="precoCompra"
             />
           </div>
           <div className="control-group">
             <label class="control-label" for="inputName">
-              RG
+              Preço de Venda
             </label>
             <input
               onChange={this.logChange}
               className="form-control"
               placeholder="Escreva seu RG aqui"
-              name="identidade"
+              name="precoVenda"
             />
           </div>
           <div className="control-group">
             <label class="control-label" for="inputName">
-              Inscrição Estadual
+              Numero de Passageiros
             </label>
             <input
               onChange={this.logChange}
               className="form-control"
               placeholder="Escreva sua Inscrição estadual aqui"
-              name="inscEstadual"
+              name="nPassageiros"
             />
           </div>
           <div className="control-group">
             <label class="control-label" for="inputName">
-              Razão Social
+              Ano de Fabricação
             </label>
             <input
               onChange={this.logChange}
               className="form-control"
               placeholder="Escreva sua Razão Social aqui"
-              name="razaoSocial"
+              name="anoFabricacao"
             />
           </div>
           <div className="control-group">
             <label class="control-label" for="inputName">
-              Email
+              Ano do Modelo
             </label>
             <input
               onChange={this.logChange}
               className="form-control"
               placeholder="Escreva seu Email aqui"
-              name="email"
+              name="anoModelo"
             />
           </div>
           <div className="control-group">
             <label class="control-label" for="inputName">
-              Logradouro
+              Cavalos de Potencia
             </label>
             <input
               onChange={this.logChange}
               className="form-control"
               placeholder="Escreva seu logradouro aqui"
-              name="logradouro"
+              name="cvPotencia"
             />
           </div>
           <div className="control-group">
             <label class="control-label" for="inputName">
-              Numero
+              Capacidade do Porta Malas
             </label>
             <input
               onChange={this.logChange}
               className="form-control"
               placeholder="Escreva o numero da sua casa aqui"
-              name="numero"
+              name="capacidadePortaMalas"
             />
           </div>
           <div className="control-group">
             <label class="control-label" for="inputName">
-              Complemento
+              Quilometragem
             </label>
             <input
               onChange={this.logChange}
               className="form-control"
               placeholder="Escreva o complemento do seu endereço aqui"
-              name="complemento"
+              name="Km"
             />
           </div>
           <div className="control-group">
             <label class="control-label" for="inputName">
-              Bairro
+              Situação
             </label>
-            <input
-              onChange={this.logChange}
-              className="form-control"
-              placeholder="Escreva seu bairro aqui"
-              name="bairro"
-            />
-          </div>
-          <div className="control-group">
-            <label class="control-label" for="inputName">
-              Cidade
-            </label>
-            <input
-              onChange={this.logChange}
-              className="form-control"
-              placeholder="Escreva o nome da sua cidade aqui"
-              name="cidade"
-            />
-          </div>
-          <div className="control-group">
-            <label class="control-label" for="inputName">
-              Estado
-            </label>
-            <input
-              onChange={this.logChange}
-              className="form-control"
-              placeholder="Escreva seu estado aqui"
-              name="estado"
-            />
-          </div>
-          <div className="control-group">
-            <label class="control-label" for="inputName">
-              CEP
-            </label>
-            <input
-              onChange={this.logChange}
-              className="form-control"
-              placeholder="Escreva seu CEP aqui"
-              name="cep"
-            />
-          </div>
-          <div className="control-group">
-            <label class="control-label" for="inputName">
-              DDD
-            </label>
-            <input
-              onChange={this.logChange}
-              className="form-control"
-              placeholder="Escreva seu DDD aqui"
-              name="dd"
-            />
-          </div>
-          <div className="control-group">
-            <label class="control-label" for="inputName">
-              Telefone
-            </label>
-            <input
-              onChange={this.logChange}
-              className="form-control"
-              placeholder="Escreva o número do seu telefone aqui"
-              name="numeroTelefone"
-            />
+            <select class="mdb-select md-form">
+              <option value="" disabled selected>
+                Escolha a opção
+              </option>
+              <option value={this.state.situacao}></option>
+            </select>
           </div>
           <div className="submit-section">
             <a
@@ -640,10 +555,7 @@ export default class VeiculoRegistration extends Component {
                       />
                     </div>
                     <div className="submit-section">
-                      <button
-                        type="submit"
-                        className="btn btn-primary"
-                      >
+                      <button type="submit" className="btn btn-primary">
                         Atualizar
                       </button>
                     </div>
